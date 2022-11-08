@@ -48,12 +48,6 @@ export default class Audio {
         headers: this.headers,
         body: fd
       }).then((res) => res.json());
-
-      // let { data } = await axios.post(this.endpoint, fd, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data',
-      //   }
-      // });
       return data.file
     }
   }
@@ -66,19 +60,24 @@ export default class Audio {
     </label>`
     let coverRenderHTML = `<div class="${this.rootClass}__cover-image">
       <img alt="" src="${this.cover || ''}" />
-      <button type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></svg></button>
+      <button type="button" class="${this.rootClass}__close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></svg></button>
     </div>`
 
     let audioLabelHTML = `<label class="cdx-button ${this.rootClass}__audio-file  ${this.audioLoading ? 'cdx-loader' : ''}">
       <input type="file" class="${this.rootClass}__hidden" accept="audio/*" />
       ${this.audioSvg}
-      <span>${this.audio ? this.audio.split('/')[this.audio.split('/').length - 1] : 'Загрузить аудио-файл'}</span>
+      <span>Загрузить аудио-файл</span>
     </label>`
+
+    let audioPlayerHTML = `<div class="${this.rootClass}__audio-player cdx-button">
+      <audio controls src="${this.audio}"></audio>
+      <button class="${this.rootClass}__close" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></svg></button>
+    </div>`
 
     this.root.innerHTML = `<div class="${this.rootClass}__cover ${this.imageLoading ? 'cdx-loader' : ''}">${this.cover ? coverRenderHTML : coverLabelHTML}</div>
     <div class="${this.rootClass}__audio">
       <input type="text" class="${this.rootClass}__audio-title cdx-input" placeholder="Название" />
-      ${audioLabelHTML}
+      ${this.audio ? audioPlayerHTML : audioLabelHTML}
     </div>`;
 
     let coverContainer = this.root.querySelector(`.${this.rootClass}__cover`);
@@ -114,19 +113,28 @@ export default class Audio {
       this.title = e.target.value;
     }, false);
 
-    let audioInput = audioContainer.querySelector(`.${this.rootClass}__audio-file input`);
-    this.api.listeners.on(audioInput, 'input', (e) => {
-      this.audioLoading = true;
-      this.redraw();
-      this.handleFileUpload(e).then((file) => {
-        this.audio = file;
-      }).catch((e) => {
-        console.error(e.message);
-      }).finally(() => {
-        this.audioLoading = false;
+    if (this.audio) {
+      this.api.listeners.on(audioContainer.querySelector(`.${this.rootClass}__audio-player button`), 'click', () => {
+        if (confirm("Вы уверены?")) {
+          this.audio = null;
+          this.redraw();
+        }
+      }, false);
+    } else {
+      let audioInput = audioContainer.querySelector(`.${this.rootClass}__audio-file input`);
+      this.api.listeners.on(audioInput, 'input', (e) => {
+        this.audioLoading = true;
         this.redraw();
-      });
-    }, false);
+        this.handleFileUpload(e).then((file) => {
+          this.audio = file;
+        }).catch((e) => {
+          console.error(e.message);
+        }).finally(() => {
+          this.audioLoading = false;
+          this.redraw();
+        });
+      }, false);
+    }
   }
 
   save(){
