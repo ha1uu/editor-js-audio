@@ -12,6 +12,7 @@ let savedData = {
     {
       type: "audio",
       data: {
+        title: "Lateralus",
         audio: "/public/test_audio.mp3",
         cover: "/public/test_cover.jpg"
       }
@@ -22,7 +23,7 @@ let savedData = {
 new EditorJS({
   autofocus: true,
   data: savedData,
-  onChange: (e) => {
+  onChange(e) {
     e.saver.save().then((res) => {
       document.querySelector('#output').innerHTML = '<pre></pre>'
       new JsonViewer({
@@ -34,7 +35,15 @@ new EditorJS({
     });
   },
   tools: {
-    audio: Audio,
+    audio: {
+      class: Audio,
+      config: {
+        headers: {
+          Authorization: "Bearer 2|34O0PaoAtXpAeayiUwYSoWSVlXKbxdNukxmOILQp"
+        },
+        endpoint: 'http://127.0.0.1:8000/action/uploadeditorfile',
+      }
+    },
   }
 });
 
