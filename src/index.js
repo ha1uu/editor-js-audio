@@ -1,5 +1,4 @@
 import "./index.styl"
-import axios from "axios";
 
 export default class Poll {
   rootClass = 'editor-js-audio-plugin';
@@ -43,12 +42,18 @@ export default class Poll {
     if (e.target.files[0]) {
       let fd = new FormData();
       fd.append(this.uploadFileName, e.target.files[0])
-      let { data } = await axios.post(this.endpoint, fd, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          ...this.headers
-        }
-      });
+
+      let data = await fetch(this.endpoint, {
+        method: 'POST',
+        headers: this.headers,
+        body: fd
+      }).then((res) => res.json());
+
+      // let { data } = await axios.post(this.endpoint, fd, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   }
+      // });
       return data.file
     }
   }

@@ -13,8 +13,8 @@ let savedData = {
       type: "audio",
       data: {
         title: "Lateralus",
-        audio: "/public/test_audio.mp3",
-        cover: "/public/test_cover.jpg"
+        audio: "/test_audio.mp3",
+        cover: "/test_cover.jpg"
       }
     }
   ]
