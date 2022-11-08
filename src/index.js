@@ -1,6 +1,6 @@
 import "./index.styl"
 
-export default class Poll {
+export default class Audio {
   rootClass = 'editor-js-audio-plugin';
   title = null;
   cover = null;
