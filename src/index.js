@@ -1,6 +1,6 @@
-import "./index.styl"
+require('./index.css').toString()
 
-export default class Audio {
+class Audio {
   rootClass = 'editor-js-audio-plugin';
   title = null;
   cover = null;
@@ -152,3 +152,5 @@ export default class Audio {
     };
   }
 }
+
+module.exports = Audio;
