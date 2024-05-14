@@ -95,6 +95,7 @@ class Audio {
         this.imageLoading = true;
         this.redraw();
         this.handleFileUpload(e).then((file) => {
+          console.log('handleFileUpload', file)
           this.cover = file;
         }).catch((e) => {
           console.error(e.message);
