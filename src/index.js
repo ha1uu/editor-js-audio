@@ -48,6 +48,7 @@ class Audio {
         headers: this.headers,
         body: fd
       }).then((res) => res.json());
+      console.log('data.file', data.file)
       return data.file
     }
   }
@@ -127,6 +128,7 @@ class Audio {
         this.audioLoading = true;
         this.redraw();
         this.handleFileUpload(e).then((file) => {
+          console.log('handleFileUpload audio', file)
           this.audio = file;
         }).catch((e) => {
           console.error(e.message);
