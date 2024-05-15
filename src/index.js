@@ -85,7 +85,7 @@ class Audio {
     if (this.cover) {
       let coverRender = coverContainer.querySelector(`.${this.rootClass}__cover-image button`);
       this.api.listeners.on(coverRender, 'click', (e) => {
-        if (confirm("Вы уверены?")) {
+        if (confirm("Вы уверены, что хотите удалить?")) {
           this.cover = null;
           this.redraw();
         }
@@ -117,7 +117,7 @@ class Audio {
 
     if (this.audio) {
       this.api.listeners.on(audioContainer.querySelector(`.${this.rootClass}__audio-player button`), 'click', () => {
-        if (confirm("Вы уверены?")) {
+        if (confirm("Вы уверены, что хотите удалить?")) {
           this.audio = null;
           this.redraw();
         }
