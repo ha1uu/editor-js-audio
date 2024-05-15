@@ -7,6 +7,7 @@ class Audio {
   audio = null;
   headers = {};
   uploadFileName = 'file';
+  uploadField = null;
   imageLoading = false;
   audioLoading = false;
   endpoint = '/';
@@ -26,6 +27,9 @@ class Audio {
       }
       if (config.uploadFileName) {
         this.uploadFileName = config.uploadFileName;
+      }
+      if (config.uploadField) {
+        this.uploadField = config.uploadField;
       }
     }
   }
@@ -96,8 +100,11 @@ class Audio {
         this.imageLoading = true;
         this.redraw();
         this.handleFileUpload(e).then((file) => {
-          console.log('handleFileUpload', file)
-          this.cover = file;
+          if (this.uploadField) {
+            this.cover = file[this.uploadField]
+          } else {
+            this.cover = file;
+          }
         }).catch((e) => {
           console.error(e.message);
         }).finally(() => {
@@ -128,8 +135,11 @@ class Audio {
         this.audioLoading = true;
         this.redraw();
         this.handleFileUpload(e).then((file) => {
-          console.log('handleFileUpload audio', file)
-          this.audio = file;
+          if (this.uploadField) {
+            this.audio = file[this.uploadField]
+          } else {
+            this.audio = file;
+          }
         }).catch((e) => {
           console.error(e.message);
         }).finally(() => {
