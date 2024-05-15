@@ -7,7 +7,6 @@ class Audio {
   audio = null;
   headers = {};
   uploadFileName = 'file';
-  uploadField = null;
   imageLoading = false;
   audioLoading = false;
   endpoint = '/';
@@ -27,9 +26,6 @@ class Audio {
       }
       if (config.uploadFileName) {
         this.uploadFileName = config.uploadFileName;
-      }
-      if (config.uploadField) {
-        this.uploadField = config.uploadField;
       }
     }
   }
@@ -52,7 +48,6 @@ class Audio {
         headers: this.headers,
         body: fd
       }).then((res) => res.json());
-      console.log('data.file', data.file)
       return data.file
     }
   }
@@ -64,7 +59,7 @@ class Audio {
       <span>Добавить изображение</span>
     </label>`
     let coverRenderHTML = `<div class="${this.rootClass}__cover-image">
-      <img alt="" src="${this.cover || ''}" />
+      <img alt="" src="${this.cover && this.cover.url ? this.cover.url : this.cover || ''}" />
       <button type="button" class="${this.rootClass}__close"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></svg></button>
     </div>`
 
@@ -75,7 +70,7 @@ class Audio {
     </label>`
 
     let audioPlayerHTML = `<div class="${this.rootClass}__audio-player cdx-button">
-      <audio controls src="${this.audio}"></audio>
+      <audio controls src="${this.audio && this.audio.url ? this.audio.url : this.audio || ''}"></audio>
       <button class="${this.rootClass}__close" type="button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></svg></button>
     </div>`
 
@@ -100,11 +95,7 @@ class Audio {
         this.imageLoading = true;
         this.redraw();
         this.handleFileUpload(e).then((file) => {
-          if (this.uploadField) {
-            this.cover = file[this.uploadField]
-          } else {
-            this.cover = file;
-          }
+          this.cover = file;
         }).catch((e) => {
           console.error(e.message);
         }).finally(() => {
@@ -135,11 +126,7 @@ class Audio {
         this.audioLoading = true;
         this.redraw();
         this.handleFileUpload(e).then((file) => {
-          if (this.uploadField) {
-            this.audio = file[this.uploadField]
-          } else {
-            this.audio = file;
-          }
+          this.audio = file;
         }).catch((e) => {
           console.error(e.message);
         }).finally(() => {
